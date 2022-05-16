@@ -10,6 +10,7 @@ public class ReceptionTime {
     }
 
     public static void startCallCenter() {
+        System.out.println("CustomersQueue is opened.");
         isReceptionTime = true;
     }
 

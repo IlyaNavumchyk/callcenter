@@ -37,8 +37,14 @@ public class CallCenterDemo {
         //Creates a thread that fills a queue with customers
         new Thread(new CustomersQueue(numberOfCustomers, customersQueue)).start();
 
-        //Reception time
-        TimeUnit.SECONDS.sleep(30);
+        //Reception time 30 seconds while operatorsStaff is work
+        for (int i = 0; i < 30; i++) {
+            if (operatorsStaff.isAlive()) {
+                TimeUnit.SECONDS.sleep(1);
+            } else {
+                break;
+            }
+        }
 
         //CustomersQueue is close. Set flag isWork = false
         ReceptionTime.stopCallCenter();
@@ -47,7 +53,7 @@ public class CallCenterDemo {
         operatorsStaff.join();
 
         //Call center closed
-        System.out.println("Call center finished work.\n");
+        System.out.println("Call center finished work.");
 
         scanner.close();
     }

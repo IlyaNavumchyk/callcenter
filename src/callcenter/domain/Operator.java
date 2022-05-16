@@ -1,6 +1,5 @@
 package callcenter.domain;
 
-import callcenter.utils.OperatorsStaff;
 import callcenter.utils.ReceptionTime;
 
 import java.util.concurrent.BlockingQueue;
@@ -21,9 +20,7 @@ public class Operator implements Runnable {
     @Override
     public void run() {
         System.out.println(this.name + " started work.");
-        OperatorsStaff.incrementNumberOfOperatorsWhoWork();
 
-        //while isReceptionTime = true or isReceptionTime = false and customersQueue not is empty
         while (ReceptionTime.getIsReceptionTime() || !customersQueue.isEmpty()) {
             try {
                 Customer customer = customersQueue.take();
@@ -32,12 +29,17 @@ public class Operator implements Runnable {
                 TimeUnit.SECONDS.sleep(5);
 
                 System.out.println(name + " spoke to the " + customer.getName());
+
+                //throw new InterruptedException();
+
             } catch (InterruptedException e) {
+                System.out.println(name + " finished work with Error.");
                 e.printStackTrace();
+                break;
             }
         }
-
-        System.out.println(name + " finished work.");
-        OperatorsStaff.decrementNumberOfOperatorsWhoWork();
+        if (!ReceptionTime.getIsReceptionTime() && customersQueue.isEmpty()) {
+            System.out.println(name + " finished work.");
+        }
     }
 }
